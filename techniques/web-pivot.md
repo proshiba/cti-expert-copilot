@@ -6,8 +6,8 @@ exact queries to run them. Built for authorized OSINT, anti-fraud/anti-scam, phi
 takedown, brand protection, and threat-infrastructure investigation.
 
 Integrated from the **WebPivot** toolkit by **[Zeroska](https://github.com/Zeroska)**, adapted for cti-expert. Tools live in `$SKILL_DIR/scripts/webpivot/`
-(`$SKILL_DIR` = the dir containing this skill's `SKILL.md`; Claude Code:
-`~/.claude/skills/cti-expert`). The core is **stdlib-only** — run everything with `uv`.
+(`$SKILL_DIR` = the directory containing the root `SKILL.md`; in Copilot CLI this is
+the open repository). The core is **stdlib-only** — run everything with `uv`.
 
 ## When this fires
 
@@ -35,7 +35,7 @@ Integrated from the **WebPivot** toolkit by **[Zeroska](https://github.com/Zeros
 | `/webpivot --wallets <case>` | `crypto_balance.py <addr…>` | on-chain balance/flow for discovered wallets |
 | `/webpivot --paths <list>` | `sensitive_paths.py --file <index>` | classify Wayback/URL list for sensitive paths |
 
-All map to the tools documented below; `$SKILL_DIR` = `~/.claude/skills/cti-expert`.
+All map to the tools documented below; resolve `$SKILL_DIR` from the root `SKILL.md`.
 `/rank-relations`, `/cert-pivot`, `/pivot-suggest`, `/crypto-balance`, `/email-hygiene`,
 and `/sensitive-paths` are top-level aliases for the same tools.
 

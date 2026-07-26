@@ -31,7 +31,11 @@ case "$ARCH" in
 esac
 
 # ── Venv paths differ on Windows ─────────────────────────────
-VENV_DIR="$HOME/.claude/skills/.venv"
+# Keep runtime state beside the resolved skill, regardless of whether the caller
+# is Claude Code, GitHub Copilot CLI, Codex, or a manual clone. Override when a
+# shared environment is desired.
+VENV_DIR="${CTI_VENV_DIR:-$SKILL_DIR/.venv}"
+VENDOR_DIR="${CTI_VENDOR_DIR:-$SKILL_DIR/vendor}"
 if [[ "$OS" == "windows" ]]; then
   VENV_BIN="$VENV_DIR/Scripts"
 else
@@ -267,7 +271,7 @@ pip_install() {
 blackbird_install() {
   local already=false
   local blackbird_repo="https://github.com/p1ngul1n0/blackbird.git"
-  local blackbird_dir="$HOME/.claude/skills/cti-expert/vendor/blackbird"
+  local blackbird_dir="$VENDOR_DIR/blackbird"
   has_py "blackbird" && already=true
   mkdir -p "$(dirname "$blackbird_dir")"
   if [[ -d "$blackbird_dir/.git" ]]; then
@@ -467,7 +471,7 @@ gh_binary_install() {
 echo -e "${BOLD}CTI Expert — Tool Installer${NC}"
 echo "Platform:  $OS/$ARCH"
 echo "Skill:     $SKILL_DIR"
-echo "Venv:      $HOME/.claude/skills/.venv"
+echo "Venv:      $VENV_DIR"
 echo "Installer: uv-first (pip/pipx/venv fallback)"
 [[ "$OPT_HEADLESS" == true ]] && echo "Mode:     +headless"
 [[ "$OPT_GO" == true ]]       && echo "Mode:     +go"
@@ -581,7 +585,7 @@ fi
 
 # sharetrace — not on PyPI, no setup.py; clone + install deps + register via .pth
 SHARETRACE_REPO="https://github.com/7onez/sharetrace.git"
-SHARETRACE_DIR="$HOME/.claude/skills/cti-expert/vendor/sharetrace"
+SHARETRACE_DIR="$VENDOR_DIR/sharetrace"
 SHARETRACE_ALREADY=false
 "$VENV_PYTHON" -c "import sharetrace" &>/dev/null 2>&1 && SHARETRACE_ALREADY=true
 
@@ -686,7 +690,7 @@ fi
 # already installed above) then drop the script into ~/.local/bin. Linux/macOS/WSL.
 section "ASN lookup tool (nitefood/asn)"
 ASN_RAW="https://raw.githubusercontent.com/nitefood/asn/master/asn"
-ASN_DIR="$HOME/.claude/skills/cti-expert/vendor/asn"
+ASN_DIR="$VENDOR_DIR/asn"
 ASN_BIN="$HOME/.local/bin"
 if [[ "$OS" == "linux" ]] && has apt-get; then
   # mtr-tiny/bind9-dnsutils on newer Debian; mtr/dnsutils on older — try both, tolerate misses

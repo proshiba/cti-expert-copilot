@@ -106,7 +106,7 @@ Quick reference for all CLI tools used by Free OSINT Expert modules. Covers inst
 | 1 (Primary) | `subfinder -d <domain> -oJ` | CLI | 45+ passive sources, fast |
 | 2 (Secondary) | `curl -s "https://crt.sh/?q=%25.<domain>&output=json"` | API | CT log query |
 | 3 (Tertiary) | `amass enum -passive -d <domain>` | CLI | 87 sources, thorough |
-| 4 (Web fallback) | `site:securitytrails.com "<domain>"` | WebSearch | No install needed |
+| 4 (Web fallback) | `site:securitytrails.com "<domain>"` | built-in web search | No install needed |
 
 ### Secret / Credential Scanning
 
@@ -114,7 +114,7 @@ Quick reference for all CLI tools used by Free OSINT Expert modules. Covers inst
 |----------|------|--------|-------|
 | 1 (Primary) | `trufflehog github --repo=<url> --json` | CLI | Git history entropy scan |
 | 2 (Secondary) | `gitleaks detect --source <path> --verbose` | CLI | Local repo scan |
-| 3 (Web fallback) | Google dork: `site:github.com "<domain>" "password"` | WebSearch | No install needed |
+| 3 (Web fallback) | Google dork: `site:github.com "<domain>" "password"` | built-in web search | No install needed |
 
 ### Threat Intelligence (IP/Domain/URL/Hash)
 
@@ -239,8 +239,8 @@ different services entirely. See [`techniques/threat-intel.md`](../techniques/th
 | 2 (JS-heavy) | Scrapling DynamicFetcher | `DynamicFetcher.get(url)` | Playwright-backed, JS rendering |
 | 3 (Anti-bot) | Scrapling StealthyFetcher | `StealthyFetcher.get(url)` | Cloudflare bypass, fingerprint spoofing |
 | 4 (Fast static) | Scrapling Fetcher | `Fetcher.get(url)` | ~2ms parse, adaptive selectors |
-| 5 (CLI) | WebFetch | Claude tool | Built-in, no deps |
-| 6 (Search) | WebSearch | Claude tool | Google results only |
+| 5 (CLI) | built-in web fetch | agent capability | Built-in, no deps |
+| 6 (Search) | built-in web search | agent capability | Google results only |
 | 7 (Raw) | curl | `curl -sL url` | Last resort |
 
 ---

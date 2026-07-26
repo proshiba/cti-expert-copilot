@@ -11,7 +11,7 @@
 
 Scrapling provides adaptive, resilient web data collection for OSINT. Three fetcher tiers auto-escalate based on site behavior. Headless browser opens BY DEFAULT for JS-heavy targets.
 
-**When to use:** Any time web page content needs to be collected during investigation — replaces manual curl/WebFetch for structured scraping.
+**When to use:** Any time web page content needs to be collected during investigation — replaces manual curl/built-in web fetch for structured scraping.
 
 ---
 
@@ -75,7 +75,7 @@ When collecting data from a URL:
 1. Try `Fetcher.get(url)` — if response has content, use it
 2. If 403/429/captcha detected → escalate to `StealthyFetcher`
 3. If content empty or JS-placeholder detected → escalate to `DynamicFetcher`
-4. If all fail → fall back to WebFetch/WebSearch
+4. If all fail → fall back to built-in web fetch/built-in web search
 5. Tag finding: `[scrapling-static]` / `[scrapling-stealth]` / `[scrapling-dynamic]`
 
 **JS-heavy detection heuristic:**
@@ -147,7 +147,7 @@ Scrapling enhances these investigation modules:
 ## 8. Full Fallback Cascade
 
 ```
-agent-browser (Playwright) → DynamicFetcher → StealthyFetcher → Fetcher → WebFetch → WebSearch → curl
+agent-browser (Playwright) → DynamicFetcher → StealthyFetcher → Fetcher → built-in web fetch → built-in web search → curl
 ```
 
 ---
@@ -159,6 +159,6 @@ agent-browser (Playwright) → DynamicFetcher → StealthyFetcher → Fetcher �
 | Scrapling Fetcher | [scrapling-static] | HIGH |
 | Scrapling StealthyFetcher | [scrapling-stealth] | HIGH |
 | Scrapling DynamicFetcher | [scrapling-dynamic] | HIGH |
-| WebFetch | [fetch] | MEDIUM |
-| WebSearch | [search] | MEDIUM |
+| built-in web fetch | [fetch] | MEDIUM |
+| built-in web search | [search] | MEDIUM |
 | curl | [manual] | MEDIUM |

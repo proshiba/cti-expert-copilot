@@ -4,7 +4,7 @@
 
 ### Cyber Threat Intelligence & OSINT Analysis Toolkit
 
-**Transform Claude into a trained intelligence analyst — 74+ commands, 40 techniques, zero API keys required for core functionality.**
+**Turn GitHub Copilot into a CTI/OSINT analyst — 74+ commands, 40 techniques, zero API keys required for core functionality.**
 
 <br>
 
@@ -54,7 +54,7 @@
 
 ## What is CTI Expert?
 
-A **Claude Code skill** that transforms Claude into a trained cyber threat intelligence and open-source intelligence analyst. It runs structured intelligence collection using **74+ commands** across **40 techniques** — no API keys required for core functionality. To take full advantage, add your own **free *or* paid** API keys to the skill's `.env` — each is **auto-detected** and unlocks higher-tier access (e.g., Wigle, VirusTotal, URLScan.io, Shodan, Censys, SecurityTrails, WhoisXML).
+A **GitHub Copilot CLI Agent Skill** that turns an AI coding agent into a trained cyber threat intelligence and open-source intelligence analyst. It runs structured intelligence collection using **74+ commands** across **40 techniques** — no API keys required for core functionality. To take full advantage, add your own **free *or* paid** API keys to the skill's `.env` — each is **auto-detected** and unlocks higher-tier access (e.g., Wigle, VirusTotal, URLScan.io, Shodan, Censys, SecurityTrails, WhoisXML).
 
 > [!TIP]
 > **Keyless by default — more powerful with your keys.** Everything runs with zero keys. To unlock the skill's full power, drop any **free or paid** API keys into `.env` (or run `/apikeys set <service> <KEY>`); they're **auto-detected** and immediately upgrade `/webpivot` and other techniques with reverse favicon→host, passive DNS, cert search, and sibling-domain pivots. Missing or bad keys just degrade to a note. Full list & setup: [handbook/api-keys.md](handbook/api-keys.md).
@@ -138,7 +138,7 @@ Multi-vector reconnaissance on any target type — person, domain, organization,
 |----------|-----------|---------|
 | **Recursive pivoting** | `/case` is a **spider-map** — expands the whole network | `/case` now runs a recursive BFS pivot engine ([`pivot_orchestrator.py`](scripts/pivot_orchestrator.py) + [`engine/pivot-orchestration.md`](engine/pivot-orchestration.md)): every discovered identifier (email/domain/IP/username/wallet/…) becomes a new seed and the relationship graph expands hop-by-hop **until the frontier is exhausted**. Confidence-gated (exact-match links auto-pursue, weak/PII links held), cycle-safe (dedup + depth caps), with **per-depth checkpoints**. Defaults: active · exhaustive · checkpoint-per-depth |
 | **Archive IOC harvest** | `/webpivot --harvest` — every selector the site ever exposed | [`wayback_harvest.py`](scripts/webpivot/wayback_harvest.py) runs the full extractor over a domain's **entire Wayback history**, merging **emails, phones, crypto wallets, tracking/verification IDs, SaaS-operator IDs and socials** with first-seen/last-seen — recovering selectors a network later scrubbed. Emits case-schema `indicators[]` straight into the IOC bundle; auto-runs in `/case` for domain/URL targets. `/webpivot` now also extracts **phone numbers** (`tel:` + formatted) as ranked pivot leads |
-| **Archive access** | Fetch archived pages Claude Code's WebFetch can't reach | WebFetch is blocked from `web.archive.org` (robots.txt at the fetch layer). [`wayback_fetch.py`](scripts/webpivot/wayback_fetch.py) routes around it — CDX lookup → nearest-snapshot resolve → raw `id_` fetch, with retry/backoff (`--near`, `--list`, `--url-only`, `--json`) |
+| **Archive access** | Fetch archived pages when a built-in web fetch cannot reach them | Some agent web-fetch tools are blocked from `web.archive.org` (robots.txt at the fetch layer). [`wayback_fetch.py`](scripts/webpivot/wayback_fetch.py) routes around it — CDX lookup → nearest-snapshot resolve → raw `id_` fetch, with retry/backoff (`--near`, `--list`, `--url-only`, `--json`) |
 | **Web pivoting** | `/webpivot` — map the infra behind a page | Favicon **mmh3**, GA/GTM/AdSense IDs, wallets & SaaS-operator tokens from a page's DOM → ranked pivots; same-operator correlation via `/rank-relations` (weighted scoring + noise denylist), `/cert-pivot`, `/pivot-suggest`, `/crypto-balance`, `/email-hygiene`, `/sensitive-paths`. Auto-runs in `/case` for domain/URL targets |
 | **Keyless by default** | 100% free — no key, no signup | crt.sh (certificate transparency) + passive DNS + anonymous urlscan **always run**; full pivoting at zero cost, nothing to configure |
 | **Premium auto-detect** | Drop in a key → it upgrades itself | `/webpivot` **auto-detects** any premium key you've set (Shodan, Censys, FOFA, DNSLytics, SecurityTrails, urlscan-PRO, WhoisXML) and unlocks its higher tier — no flag, no re-run; a missing/bad key degrades to a note, never breaks the run. Manage keys with `/apikeys` |
@@ -162,7 +162,7 @@ Multi-vector reconnaissance on any target type — person, domain, organization,
 |----------|-----------|---------|
 | **Platform** | Cross-platform OS detection (Windows/macOS/Linux) | OS-aware auto-install; self-healing DOCX (UTF-8 + auto-located pandoc) |
 | **Packaging** | uv-first toolchain | `uv venv` / `uv pip` / `uv tool`; PEP 723 `uv run` zero-setup scripts; pip/pipx/venv fallback |
-| **Portability** | Cross-agent support | Runs in Claude Code **and** OpenAI Codex via `AGENTS.md` + a ready-to-copy `/cti-expert` Codex prompt |
+| **Portability** | Cross-agent support | Runs primarily in GitHub Copilot CLI and also supports Claude Code and OpenAI Codex through the shared root skill |
 | **CTI** | Infostealer-log analyzer (`/stealer-log`) | Family ID, victim-vs-operator profiling, cross-log actor correlation, IOC + raw-artifact extraction |
 | **Recon** | Admin / sensitive-endpoint detection | Subdomain-prefix + path + CJK classifier (`admin`, `adm`, `kef`, `ador`, `panel`…) |
 | **Collection** | agent-browser integration | Primary interactive browser ([vercel-labs](https://github.com/vercel-labs/agent-browser)): CDP, accessibility-tree snapshots, screenshots; complementary to Scrapling, no API key for core |
@@ -230,89 +230,105 @@ Multi-vector reconnaissance on any target type — person, domain, organization,
 
 ## Installation
 
-> **Recommended:** Use **Claude Code CLI** — it gives you the full terminal workflow, persistent sessions, and direct skill invocation. [Download here](https://docs.anthropic.com/en/docs/claude-code/overview) or run `npm install -g @anthropic-ai/claude-code`.
+> **Recommended:** Use **GitHub Copilot CLI** from the cloned repository. CTI Expert
+> ships repository instructions, a selectable custom agent, and an Agent Skill under
+> `.github/`; no Claude-specific skill directory is required.
 
-### Why Claude Code CLI?
+### Why GitHub Copilot CLI?
 
-The entire CTI Expert workflow is optimized for Claude Code CLI. The CLI gives you:
-- **Persistent sessions** — investigations survive terminal restarts via `/cti-expert /workspace save`
-- **Full tool access** — file writes, Python scripts, DOCX generation, all run natively
-- **Skill invocation** — type `/cti-expert` directly in the terminal, no browser required
-- **Background agents** — parallel enrichment via AgentFlow works best with the CLI
-
-#### 🖥️ Where to run it — the CLI is best for this skill
+- **Native repository customization** — Copilot loads `.github/copilot-instructions.md`,
+  `.github/agents/cti-expert.agent.md`, and `.github/skills/cti-expert/SKILL.md`.
+- **Full local execution** — the agent can write case files and run the Python and
+  OSINT utilities from the repository.
+- **Persistent workspaces** — reports and saved cases stay in the checkout.
+- **Cross-platform runtime** — the same workflow runs in PowerShell or Bash and uses
+  `uv` for portable Python execution.
 
 > [!IMPORTANT]
-> CTI Expert is **execution-heavy**: it runs `uv`/Python, installs OSINT tools, writes `.md`/`.html`/`.json`/`.csv` reports + IOC bundles, reaches many external sites, and saves case workspaces. What matters is a **real local shell + persistent files + open network** — a **CLI or local desktop agent** gives you that; an ephemeral **cloud sandbox does not**. This applies equally to **Claude** and **Codex**.
+> CTI Expert is execution-heavy. Run it in a local Copilot CLI with a persistent
+> filesystem and appropriate network access. If your organization restricts shell,
+> network, or tool execution, record those restrictions as collection gaps.
 
-| Environment | Running cases | Why |
-|---|---|---|
-| **Claude Code CLI** · **Codex CLI** | ✅ **Best** | Real shell, persistence, background tasks, open network — what the skill is built for |
-| **Claude Code Desktop** · **Codex IDE extension** | ✅ Great | Same local execution; nicest for **reading** rendered reports, charts & diagrams |
-| **claude.ai/code (web)** · **Codex cloud / ChatGPT web** | ⚠️ Limited | Reasoning & query generation work, but files don't persist to your disk and outbound network is often restricted |
+### Step 1 — Install and authenticate GitHub Copilot CLI
 
-> [!TIP]
-> **Run investigations in a CLI** (Claude Code or Codex); open the generated `.docx`/report in a Desktop/IDE window if you prefer reading there. Use web/cloud surfaces only for analyst-reasoning, not execution-heavy recon.
-
----
-
-### Step 1 &mdash; Install Claude Code CLI
+Install the current GitHub Copilot CLI using GitHub's documented method. For the npm
+package:
 
 ```bash
-npm install -g @anthropic-ai/claude-code
+npm install -g @github/copilot
+copilot
 ```
 
-> Requires Node.js 18+. Full docs: [docs.anthropic.com/en/docs/claude-code/overview](https://docs.anthropic.com/en/docs/claude-code/overview)
+In the interactive CLI, use `/login` if authentication is required. GitHub Copilot
+access must be enabled for the signed-in account. Because CLI prerequisites can change,
+consult the official GitHub Copilot CLI documentation for the current supported Node.js
+version and alternative installers.
 
----
-
-### Step 2 &mdash; Clone + All-in-One Installer
-
-The installer handles everything: Python dependencies, system tools (`whois`, `dig`, `asn`, `jq`, `exiftool`), OSINT tools (`maigret`, `sherlock`, `holehe`, `h8mail`, and more), and optional headless browser + Go tools. It is **powered by [uv](https://docs.astral.sh/uv/)** (Astral's ultra-fast Rust package manager) — the script bootstraps uv, then uses `uv venv` / `uv pip` / `uv tool` for all Python installs, falling back to `pip`/`pipx`/`venv` only if uv can't be installed. Use `install.ps1` on Windows (PowerShell) or `install.sh` on macOS/Linux/Git Bash/WSL.
-
-<table>
-<tr>
-<th>Platform</th>
-<th>Command</th>
-</tr>
-<tr>
-<td><b>Linux / macOS</b></td>
-<td>
+### Step 2 — Clone CTI Expert and install its tools
 
 ```bash
-git clone https://github.com/7onez/cti-expert.git ~/.claude/skills/cti-expert
-bash ~/.claude/skills/cti-expert/scripts/install.sh
+# Linux / macOS / Git Bash / WSL
+git clone https://github.com/7onez/cti-expert.git
+cd cti-expert
+bash scripts/install.sh
 ```
-
-</td>
-</tr>
-<tr>
-<td><b>Windows (Git Bash or WSL)</b></td>
-<td>
-
-```bash
-git clone https://github.com/7onez/cti-expert.git ~/.claude/skills/cti-expert
-bash ~/.claude/skills/cti-expert/scripts/install.sh
-```
-
-</td>
-</tr>
-<tr>
-<td><b>Windows (PowerShell — native)</b></td>
-<td>
 
 ```powershell
-git clone https://github.com/7onez/cti-expert.git "$env:USERPROFILE\.claude\skills\cti-expert"
-powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\skills\cti-expert\scripts\install.ps1"
+# Native Windows PowerShell
+git clone https://github.com/7onez/cti-expert.git
+Set-Location cti-expert
+powershell -ExecutionPolicy Bypass -File scripts\install.ps1
 ```
 
-</td>
-</tr>
-</table>
+The installers resolve their own repository root. Runtime dependencies are stored in
+`.venv/` and `vendor/` inside the skill by default; set `CTI_VENV_DIR` or
+`CTI_VENDOR_DIR` to override those locations.
 
-> **Windows users:** `install.ps1` is a **full native installer** (winget system tools + Python venv + OSINT tools) — no Git Bash or WSL required. It accepts the same `-Headless`, `-Go`, and `-All` flags (e.g. `install.ps1 -All`). Git Bash / WSL users can run `install.sh` instead. The DOCX generator self-heals UTF-8 output and auto-locates pandoc, so reports build on Windows with no extra environment setup. The skill itself detects the OS at runtime and installs any missing tool with the right manager (`winget` / `brew` / `apt`) — see `scripts/platform-setup.md`.
+### Step 3 — Select CTI Expert in Copilot CLI
 
----
+Start Copilot from the repository root:
+
+```text
+copilot
+/agent
+```
+
+Select **`cti-expert`**, then enter a command **without** the catalog's leading slash:
+
+```text
+case example.com
+username johndoe
+report
+```
+
+The leading slash shown in `SKILL.md` is the skill's portable command notation.
+Interactive Copilot CLI reserves slash-prefixed input for its own commands such as
+`/agent` and `/login`. For a non-interactive run, the task can be passed directly:
+
+```bash
+copilot --agent=cti-expert --prompt "case example.com"
+```
+
+### How Copilot discovers CTI Expert
+
+| File | Copilot purpose |
+|------|-----------------|
+| `.github/copilot-instructions.md` | Always-on repository guidance |
+| `.github/agents/cti-expert.agent.md` | Custom agent selected with `/agent` |
+| `.github/skills/cti-expert/SKILL.md` | Discoverable Agent Skill dispatcher |
+| `AGENTS.md` | Cross-agent OS, runtime, and path contract |
+| `SKILL.md` | Authoritative CTI workflow and command catalog |
+
+For global Agent Skill discovery, clone the complete repository to
+`~/.copilot/skills/cti-expert`. To make the custom agent globally selectable too,
+copy `.github/agents/cti-expert.agent.md` to
+`~/.copilot/agents/cti-expert.agent.md`. Keep the complete repository tree because the
+skill references `engine/`, `techniques/`, `handbook/`, and `scripts/`.
+
+### Other supported agents
+
+Claude Code and OpenAI Codex remain supported through `SKILL.md`, `AGENTS.md`, and the
+bundled Codex prompt, but GitHub Copilot CLI is the primary setup documented here.
 
 ### Installer Options
 
@@ -345,13 +361,14 @@ powershell -ExecutionPolicy Bypass -File scripts\install.ps1 -All         # + Ev
 
 ### Verify Installation
 
-```bash
-claude   # opens Claude Code CLI
-# then type:
-/cti-expert
+```text
+copilot
+/agent
 ```
 
-> If the skill loads, you'll see the CTI Expert command menu. Type `/cti-expert /help` for the full command list.
+Confirm that **`cti-expert`** appears in the agent list. Select it and enter `help` or
+`case example.com`. If it does not appear, confirm that Copilot was started from the
+repository root and that `.github/agents/cti-expert.agent.md` is present.
 
 ---
 
@@ -414,9 +431,10 @@ cp cti-expert/codex/cti-expert.md ~/.codex/prompts/cti-expert.md   # Windows: co
 
 | Requirement | Version | Purpose |
 |-------------|---------|---------|
-| [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code/overview) | Latest | **Recommended** terminal runtime |
+| [GitHub Copilot CLI](https://docs.github.com/copilot/concepts/agents/about-copilot-cli) | Latest | **Recommended** terminal runtime |
+| [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code/overview) | Latest | Alternative terminal runtime |
 | [Claude Code Desktop](https://claude.ai/download) | Latest | GUI runtime (macOS/Windows) |
-| Node.js | 18+ | Required by Claude Code CLI |
+| Node.js | See current CLI documentation | Required by npm-installed agent CLIs |
 | [uv](https://docs.astral.sh/uv/) | Latest | **Recommended** — bootstrapped by the installer; manages Python, venv, packages & CLI tools |
 | Python | 3.10+ | DOCX report generation, Scrapling, AgentFlow (uv can install this for you) |
 | pip packages | See `requirements.txt` | Charts, diagrams, styling |
@@ -432,9 +450,12 @@ cp cti-expert/codex/cti-expert.md ~/.codex/prompts/cti-expert.md   # Windows: co
 
 ## Quick Start
 
-> **How to run commands:** All commands below use the `/cti-expert` prefix. Type `/cti-expert` followed by the command in Claude Code.
+> **GitHub Copilot CLI:** start `copilot`, select **cti-expert** with `/agent`, and
+> remove `/cti-expert /` from the examples below. For example, enter
+> `case example.com`. Copilot reserves leading slashes for its own CLI commands.
 >
-> Example: `/cti-expert /case example.com` — not just `/case example.com`
+> **Claude Code:** the portable examples retain the historical
+> `/cti-expert /case example.com` form. `SKILL.md` lists commands as `/case`.
 
 ### 1 &mdash; Full Autonomous Case
 

@@ -176,7 +176,7 @@ Used by the HTML report and the IOC export when present; safely ignored otherwis
 
 ```bash
 # Generate professional CTI Report DOCX with charts and diagrams
-python3 ~/.claude/skills/cti-expert/scripts/generate-cti-docx.py \
+uv run "$SKILL_DIR/scripts/generate-cti-docx.py" \
   "${JSON_DATA_FILE}" \
   "${DOCX_FILE}"
 ```

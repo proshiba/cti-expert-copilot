@@ -12,10 +12,11 @@ dependency, never run a Linux-only command on Windows.
 > on every OS, it **collapses the per-OS split for Python tools**. The per-OS `pip`/`pipx`/
 > `venv` commands below remain documented as the fallback when uv cannot be installed.
 
-> **Cross-agent.** This applies in Claude Code (Desktop & CLI) and in OpenAI Codex / other
+> **Cross-agent.** This applies in GitHub Copilot CLI, Claude Code (Desktop & CLI), OpenAI Codex, and other
 > `AGENTS.md`-aware agents alike (see [`../AGENTS.md`](../AGENTS.md)). **`$SKILL_DIR`** = the
-> directory containing `SKILL.md` — Claude Code: `~/.claude/skills/cti-expert`; Codex/clone:
-> the repo you're working in. Resolve it by locating `SKILL.md`; don't hard-assume `~/.claude`.
+> directory containing the root `SKILL.md` — GitHub Copilot/Codex/clone: the open repo;
+> Claude Code: its installed skill directory. Resolve it by locating `SKILL.md`; don't
+> hard-assume a vendor-specific home directory.
 
 ---
 
@@ -31,8 +32,8 @@ the rest of the session.
 | Python `sys.platform` | `win32` | `darwin` | `linux` |
 | Python `os.name` | `nt` | `posix` | `posix` |
 
-**In Claude Code**, the environment block already reports the platform (e.g.
-`Platform: win32`). Trust it. If absent, run one probe:
+If the agent runtime reports the platform (for example, `win32`), trust it.
+Otherwise run one probe:
 
 ```powershell
 # PowerShell (Windows-native)
@@ -77,23 +78,23 @@ The official installer drops `uv` in `~/.local/bin` (`%USERPROFILE%\.local\bin` 
 With uv (preferred), you usually don't pick an interpreter at all:
 - **Run a script:** `uv run script.py ARGS` (deps from PEP 723 inline metadata, on the fly).
 - **Install a CLI tool:** `uv tool install <pkg>`.
-- **Install a library into the skill venv:** `uv venv ~/.claude/skills/.venv` (once) then
+- **Install a library into the skill venv:** `uv venv "$SKILL_DIR/.venv"` (once) then
   `uv pip install --python <venv-python> <pkg>`. Note a uv-created venv has **no pip** — always target it via `uv pip --python`, not `<venv>/python -m pip`.
 
 **No-uv fallback — the `$PY` convention.** Resolve one interpreter and reuse it:
 
-1. **Prefer the skill venv** at `~/.claude/skills/.venv` (Windows `…\Scripts\python.exe`, Unix `…/bin/python3`).
+1. **Prefer the skill venv** at `$SKILL_DIR/.venv` (Windows `…\Scripts\python.exe`, Unix `…/bin/python3`).
 2. **Else the system interpreter:** `py` (Windows) / `python3` (Unix).
 
 ```powershell
 # PowerShell
-$PY = if (Test-Path "$env:USERPROFILE\.claude\skills\.venv\Scripts\python.exe") {
-        "$env:USERPROFILE\.claude\skills\.venv\Scripts\python.exe"
+$PY = if (Test-Path "$SKILL_DIR\.venv\Scripts\python.exe") {
+        "$SKILL_DIR\.venv\Scripts\python.exe"
       } else { "py" }
 ```
 ```bash
 # Bash
-PY="$HOME/.claude/skills/.venv/bin/python3"; [ -x "$PY" ] || PY="python3"
+PY="$SKILL_DIR/.venv/bin/python3"; [ -x "$PY" ] || PY="python3"
 ```
 
 ---
@@ -119,8 +120,8 @@ than tool-by-tool:
 
 | OS | One-shot command |
 |----|------------------|
-| **Windows (PowerShell)** | `powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\skills\cti-expert\scripts\install.ps1"` |
-| **macOS / Linux / Git Bash / WSL** | `bash ~/.claude/skills/cti-expert/scripts/install.sh` |
+| **Windows (PowerShell)** | `powershell -ExecutionPolicy Bypass -File "$SKILL_DIR\scripts\install.ps1"` |
+| **macOS / Linux / Git Bash / WSL** | `bash "$SKILL_DIR/scripts/install.sh"` |
 
 Flags (both installers): `-Headless`/`--headless` (Scrapling + Chromium ~200 MB),
 `-Go`/`--go` (Go tools), `-All`/`--all` (everything).

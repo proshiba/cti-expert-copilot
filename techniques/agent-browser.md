@@ -9,7 +9,7 @@ agent to read and act on), plus screenshots for evidence.
 
 - **No API key** for core automation (only the optional `chat` natural-language mode needs
   a Vercel AI Gateway key). Apache-2.0, cross-platform (Win/macOS/Linux), MCP-capable.
-- It ships its **own** agent skill + MCP server, so it works in **Claude Code and Codex** alike.
+- It ships its **own** agent skill + MCP server, so it works with **GitHub Copilot CLI, Claude Code, and Codex**.
 
 > **OPSEC:** this opens target sites in a real Chrome. For scam/malware/darknet targets run
 > it on a clean VPS/sandbox (see "Where to run it"), and use a proxy/VPN where appropriate.
@@ -97,6 +97,6 @@ Tag findings collected this way with `[browser]` (per the collection-method tags
 
 ## 5. MCP mode (optional)
 
-`agent-browser mcp` runs an MCP server (stdio JSON-RPC). In Claude Code or Codex you can
+`agent-browser mcp` runs an MCP server (stdio JSON-RPC). In GitHub Copilot CLI, Claude Code, or Codex you can
 register it as an MCP server to expose browser actions as native tools, instead of (or in
 addition to) shelling out to the CLI.

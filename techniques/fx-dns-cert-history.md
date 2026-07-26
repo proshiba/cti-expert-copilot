@@ -23,8 +23,8 @@ Retrieves historical DNS records and SSL/TLS certificate timelines for a domain.
 **Primary — SecurityTrails (web search, no auth for cached results):**
 ```bash
 # Google dork to find cached SecurityTrails DNS history
-# WebSearch: site:securitytrails.com/domain/<domain>/history/a
-# WebSearch: site:securitytrails.com/domain/<domain>/dns
+# built-in web search: site:securitytrails.com/domain/<domain>/history/a
+# built-in web search: site:securitytrails.com/domain/<domain>/dns
 
 # Returns: historical A, AAAA, MX, NS, TXT record changes with dates
 ```
@@ -36,7 +36,7 @@ curl -s "https://viewdns.info/iphistory/?domain=<domain>"
 # Parse HTML response for IP history table
 
 # Reverse IP — find other domains on same historical IP
-# WebSearch: site:viewdns.info/reverseip/?host=<IP>
+# built-in web search: site:viewdns.info/reverseip/?host=<IP>
 ```
 
 **Tertiary — Mnemonic PassiveDNS (free API, no key):**
@@ -59,14 +59,14 @@ curl -s "https://web.archive.org/cdx/search/cdx?url=<domain>&output=json&fl=time
 Step 1: Query Mnemonic PassiveDNS API for historical A/AAAA/MX/NS records
   └─ curl -s "https://api.mnemonic.no/pdns/v3/<domain>" → parse JSON
 
-Step 2: WebSearch for SecurityTrails cached history
+Step 2: built-in web search for SecurityTrails cached history
   └─ site:securitytrails.com/domain/<domain>/history/a
 
 Step 3: Check ViewDNS IP history
-  └─ WebSearch: site:viewdns.info/iphistory/?domain=<domain>
+  └─ built-in web search: site:viewdns.info/iphistory/?domain=<domain>
 
 Step 4: Cross-reference IP changes with WHOIS history
-  └─ WebSearch: site:web.archive.org <domain> whois
+  └─ built-in web search: site:web.archive.org <domain> whois
 
 Step 5: Build DNS timeline with dated record changes
   └─ Correlate across sources for HIGH confidence transitions
@@ -110,7 +110,7 @@ Mnemonic API down?
   └─> SecurityTrails cached results via Google dork
   └─> ViewDNS.info IP history
   └─> Wayback CDX for archived DNS pages
-  └─> WebSearch: "<domain>" "DNS history" OR "IP history"
+  └─> built-in web search: "<domain>" "DNS history" OR "IP history"
 ```
 
 ---
@@ -132,13 +132,13 @@ curl -s "https://crt.sh/?q=%25.<domain>&output=json" | python3 -m json.tool
 
 **Secondary — CertSpotter (free tier, no key for basic):**
 ```bash
-# WebSearch for cached CertSpotter results
-# WebSearch: site:sslmate.com/certspotter "<domain>"
+# built-in web search for cached CertSpotter results
+# built-in web search: site:sslmate.com/certspotter "<domain>"
 ```
 
 **Tertiary — Google Transparency Report:**
 ```bash
-# WebSearch: site:transparencyreport.google.com "<domain>"
+# built-in web search: site:transparencyreport.google.com "<domain>"
 # Shows certificate transparency log entries
 ```
 
@@ -205,7 +205,7 @@ Sources: crt.sh Certificate Transparency
 crt.sh API slow/down?
   └─> crt.sh web UI: https://crt.sh/?q=<domain> (parse HTML)
   └─> Google Transparency Report search
-  └─> WebSearch: "<domain>" certificate transparency
+  └─> built-in web search: "<domain>" certificate transparency
   └─> Wayback Machine: site:crt.sh "?q=<domain>"
 ```
 

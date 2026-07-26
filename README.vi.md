@@ -6,7 +6,7 @@
 
 ### CTI Expert là gì?
 
-Một kỹ năng của Claude Code biến Claude thành một nhà phân tích tình báo mối đe dọa mạng và tình báo nguồn mở chuyên nghiệp. Chạy thu thập tình báo có cấu trúc sử dụng **74+ lệnh** trên **40 kỹ thuật** — không cần API key cho chức năng cốt lõi. Để tận dụng tối đa, bạn có thể thêm API key **miễn phí *hoặc* trả phí** của riêng mình vào tệp `.env` — mỗi key được **tự động phát hiện** và mở khóa truy cập cấp cao hơn (VD: Wigle, VirusTotal, URLScan.io, Shodan, Censys, SecurityTrails, WhoisXML).
+Một Agent Skill dành chủ yếu cho **GitHub Copilot CLI**, biến tác nhân AI thành nhà phân tích tình báo mối đe dọa mạng và OSINT chuyên nghiệp. Chạy thu thập tình báo có cấu trúc sử dụng **74+ lệnh** trên **40 kỹ thuật** — không cần API key cho chức năng cốt lõi. Để tận dụng tối đa, bạn có thể thêm API key **miễn phí *hoặc* trả phí** của riêng mình vào tệp `.env` — mỗi key được **tự động phát hiện** và mở khóa truy cập cấp cao hơn (VD: Wigle, VirusTotal, URLScan.io, Shodan, Censys, SecurityTrails, WhoisXML).
 
 > [!TIP]
 > **Miễn phí theo mặc định — mạnh hơn khi có key của bạn.** Mọi thứ chạy được với zero key. Để mở khóa toàn bộ sức mạnh, thêm bất kỳ API key **miễn phí hoặc trả phí** nào vào `.env` (hoặc chạy `/apikeys set <dịch-vụ> <KEY>`); chúng được **tự động phát hiện** và nâng cấp ngay `/webpivot` cùng các kỹ thuật khác với reverse favicon→host, passive DNS, tra cứu chứng chỉ, và pivot tên miền anh em. Key thiếu/sai chỉ hạ xuống ghi chú. Danh sách & hướng dẫn: [handbook/api-keys.md](handbook/api-keys.md).
@@ -31,9 +31,27 @@ Một kỹ năng của Claude Code biến Claude thành một nhà phân tích t
 
 ### Cài đặt
 
-> **Khuyến nghị:** Dùng **Claude Code CLI** — cho phép sử dụng đầy đủ workflow terminal, phiên làm việc liên tục và gọi skill trực tiếp. [Tải tại đây](https://docs.anthropic.com/en/docs/claude-code/overview) hoặc chạy `npm install -g @anthropic-ai/claude-code`.
+> **Khuyến nghị: GitHub Copilot CLI.** Kho mã cung cấp sẵn chỉ dẫn repository,
+> custom agent `cti-expert`, và Agent Skill trong `.github/`; không cần thư mục riêng của Claude.
 
-#### Tại sao nên dùng Claude Code CLI?
+```bash
+npm install -g @github/copilot
+git clone https://github.com/7onez/cti-expert.git
+cd cti-expert
+copilot
+# Nhập /agent, chọn cti-expert, sau đó nhập:
+# case example.com
+```
+
+Trong Copilot CLI tương tác, dấu gạch chéo dành cho lệnh điều khiển CLI. Vì vậy hãy nhập
+`case`, `report`, v.v. mà không thêm `/`. Hướng dẫn Claude Code dưới đây được giữ lại
+như một runtime tương thích tùy chọn.
+
+#### Claude Code (runtime tương thích tùy chọn)
+
+> **Tùy chọn:** Dùng **Claude Code CLI** — cho phép sử dụng đầy đủ workflow terminal, phiên làm việc liên tục và gọi skill trực tiếp. [Tải tại đây](https://docs.anthropic.com/en/docs/claude-code/overview) hoặc chạy `npm install -g @anthropic-ai/claude-code`.
+
+#### Vì sao Claude Code vẫn được hỗ trợ?
 
 Toàn bộ workflow CTI Expert được tối ưu cho Claude Code CLI:
 - **Phiên làm việc liên tục** — điều tra được lưu qua `/cti-expert /workspace save`

@@ -7,7 +7,7 @@ surface. Tool: `scripts/apikeys/apikeys.py`; catalog: `scripts/apikeys/registry.
 
 ## Key store
 
-- **File:** the skill-root `.env` → `$SKILL_DIR/.env` (`~/.claude/skills/cti-expert/.env`),
+- **File:** the skill-root `.env` → `$SKILL_DIR/.env` (for example, the open Copilot repository),
   written `chmod 600` and **gitignored**. Override the location with `CTI_API_KEYS_ENV`.
 - **Resolution order (everywhere):** OS **environment variable first**, then the `.env`, then
   keyless. An env var always overrides the file.

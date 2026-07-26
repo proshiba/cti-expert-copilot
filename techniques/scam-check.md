@@ -42,7 +42,7 @@ curl -s -X POST "https://api.destroy.tools/v1/check/bulk" \
 
 Web-based lookup — no API key needed.
 
-**Method:** WebSearch or WebFetch on:
+**Method:** built-in web search or web fetch on:
 ```
 https://transparencyreport.google.com/safe-browsing/search?url=[DOMAIN]
 ```
@@ -53,7 +53,7 @@ https://transparencyreport.google.com/safe-browsing/search?url=[DOMAIN]
 
 Free public search — no API key needed for viewing existing scans.
 
-**Method:** WebSearch for `site:urlscan.io "[DOMAIN]"` or WebFetch:
+**Method:** built-in web search for `site:urlscan.io "[DOMAIN]"` or web fetch:
 ```
 https://urlscan.io/search/#page.domain:[DOMAIN]
 ```
@@ -64,7 +64,7 @@ https://urlscan.io/search/#page.domain:[DOMAIN]
 
 Free public lookup — no API key needed for basic results.
 
-**Method:** WebSearch for `site:virustotal.com "[DOMAIN]"` or fetch via `agent-browser`:
+**Method:** built-in web search for `site:virustotal.com "[DOMAIN]"` or fetch via `agent-browser`:
 ```
 https://www.virustotal.com/gui/domain/[DOMAIN]
 ```
@@ -75,7 +75,7 @@ https://www.virustotal.com/gui/domain/[DOMAIN]
 
 Free web-based trust score.
 
-**Method:** WebSearch for `site:scamadviser.com "[DOMAIN]"` or WebFetch:
+**Method:** built-in web search for `site:scamadviser.com "[DOMAIN]"` or web fetch:
 ```
 https://www.scamadviser.com/check-website/[DOMAIN]
 ```
@@ -86,7 +86,7 @@ https://www.scamadviser.com/check-website/[DOMAIN]
 
 Free — no API key required for basic lookups.
 
-**Method:** WebSearch for `site:phishtank.org "[DOMAIN]"` or WebFetch:
+**Method:** built-in web search for `site:phishtank.org "[DOMAIN]"` or web fetch:
 ```
 https://phishtank.org/target_search.php?target=[DOMAIN]
 ```
@@ -97,7 +97,7 @@ https://phishtank.org/target_search.php?target=[DOMAIN]
 
 Free URL scanning service.
 
-**Method:** WebSearch for `site:checkphish.bolster.ai "[DOMAIN]"` to find existing scan results.
+**Method:** built-in web search for `site:checkphish.bolster.ai "[DOMAIN]"` to find existing scan results.
 
 ### Step 8: Domain Age & Registration Anomaly Check
 

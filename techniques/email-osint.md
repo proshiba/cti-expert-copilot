@@ -394,7 +394,7 @@ curl -s "https://keys.openpgp.org/vks/v1/by-email/user@example.com"
 
 ## 10. Email Permutation Generation
 
-**Method:** Pure logic — Claude generates permutations, no external tool needed.
+**Method:** Pure logic — the agent generates permutations, no external tool needed.
 
 Given a discovered name (e.g., "John Smith") and domain (e.g., "company.com"), generate:
 
@@ -443,7 +443,7 @@ Google Account Recovery: https://accounts.google.com/signin/usernamerecovery
 → Enter phone number → may reveal associated Gmail address and name
 ```
 
-**IMPORTANT:** This technique requires manual execution (CAPTCHAs, JS rendering). Claude generates the URLs and instructions; the analyst visits them.
+**IMPORTANT:** This technique requires manual execution (CAPTCHAs, JS rendering). The agent generates the URLs and instructions; the analyst visits them.
 
 **Ethics:** Do NOT complete password resets. Do NOT attempt unauthorized access. This is strictly for existence verification.
 
@@ -451,7 +451,7 @@ Google Account Recovery: https://accounts.google.com/signin/usernamerecovery
 
 ## 12. Manual Reference Tools (Web UI Only)
 
-These tools provide valuable intelligence but require manual browser interaction. Claude generates URLs with the target pre-filled where possible.
+These tools provide valuable intelligence but require manual browser interaction. The agent generates URLs with the target pre-filled where possible.
 
 | Tool | URL | What It Reveals | Automation |
 |---|---|---|---|
@@ -464,7 +464,7 @@ These tools provide valuable intelligence but require manual browser interaction
 | **Google Chat** | https://chat.google.com | Profile picture from email (requires Google login) | Manual (login) |
 | **Microsoft OneDrive** | https://onedrive.live.com | Share file with email → reveals real name | Manual (login) |
 
-**Workflow integration:** During `/email-deep`, Claude lists applicable manual URLs for the analyst to check in parallel while automated tools run.
+**Workflow integration:** During `/email-deep`, the agent lists applicable manual URLs for the analyst to check in parallel while automated tools run.
 
 ---
 

@@ -67,9 +67,9 @@ AND (confidential OR internal OR restricted OR draft OR "not for distribution")
 ## Tools & Fallbacks
 | Priority | Mechanism | Use |
 |----------|-----------|-----|
-| 1 | WebSearch(mega-dork) | Default dispatch — Google-proxied, safest |
-| 2 | WebFetch(bing.com/search?q=...) | Fallback on T1 rate-limit; Bing indexes doc-hosts well |
-| 3 | WebFetch(html.duckduckgo.com/html/?q=...) | Third-tier fallback |
+| 1 | Built-in web search with mega-dork | Default dispatch — safest available search provider |
+| 2 | Built-in web fetch of `bing.com/search?q=...` | Fallback on T1 rate-limit; Bing indexes doc-hosts well |
+| 3 | Built-in web fetch of `html.duckduckgo.com/html/?q=...` | Third-tier fallback |
 | 4 | agent-browser | Paywall-preview screenshot capture (metadata only) |
 
 Full cascade semantics: [`fx-dork-sweep.md`](fx-dork-sweep.md) §Tools & Fallbacks.

@@ -34,12 +34,11 @@ if ($All) {
 }
 
 $SkillDir = (Resolve-Path (Join-Path $PSScriptRoot ".."))
-$SkillRoot = Join-Path $env:USERPROFILE ".claude\skills"
-$VenvDir = Join-Path $SkillRoot ".venv"
+$VenvDir = if ($env:CTI_VENV_DIR) { $env:CTI_VENV_DIR } else { Join-Path $SkillDir ".venv" }
 $VenvScripts = Join-Path $VenvDir "Scripts"
 $VenvPython = Join-Path $VenvScripts "python.exe"
 $VenvPip = Join-Path $VenvScripts "pip.exe"
-$VendorDir = Join-Path $SkillRoot "cti-expert\vendor"
+$VendorDir = if ($env:CTI_VENDOR_DIR) { $env:CTI_VENDOR_DIR } else { Join-Path $SkillDir "vendor" }
 
 $script:Installed = 0
 $script:Skipped = 0

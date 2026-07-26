@@ -26,11 +26,11 @@ This file contains detailed search playbooks for each target type. When running 
 Use this ordered fallback cascade. Move to the next method only if the previous one fails or is unavailable:
 
 1. **CLI first (fastest):** Run `whois example.com` via Bash. This returns structured WHOIS data in <2 seconds with no rendering overhead. Parse the output for registrant, dates, nameservers.
-2. **WebSearch second:** Search `"example.com" whois registration` — search engines often surface WHOIS summary snippets directly in results without needing to fetch a full page.
-3. **Lightweight API endpoints third:** Use WebFetch on JSON/text endpoints that return fast:
+2. **built-in web search second:** Search `"example.com" whois registration` — search engines often surface WHOIS summary snippets directly in results without needing to fetch a full page.
+3. **Lightweight API endpoints third:** Use built-in web fetch on JSON/text endpoints that return fast:
    - `https://rdap.verisign.com/com/v1/domain/example.com` (RDAP — structured JSON, fast)
    - `https://www.whoisxmlapi.com/whoisserver/WhoisService?domainName=example.com&outputFormat=json` (may require API key)
-4. **Heavy WHOIS web UIs last resort:** Only if all above fail, try WebFetch on `who.is/whois/example.com` or `whois.domaintools.com`. These are JavaScript-heavy pages that are slow and often blocked — never use them as a first choice.
+4. **Heavy WHOIS web UIs last resort:** Only if all above fail, try built-in web fetch on `who.is/whois/example.com` or `whois.domaintools.com`. These are JavaScript-heavy pages that are slow and often blocked — never use them as a first choice.
 
 - Look for: Registrant name, organization, email, registration date, expiry, name servers
 - Pivot on: Registrant email (often reveals other domains), registrant name
@@ -59,8 +59,8 @@ Use this ordered fallback cascade. Move to the next method only if the previous 
 Use this ordered fallback cascade:
 
 1. **CLI first:** Run `dig example.com ANY +short` or individual queries (`dig A`, `dig MX`, `dig TXT`, `dig NS`) via Bash. Returns results in milliseconds.
-2. **WebSearch second:** Search `"example.com" DNS records` or `site:securitytrails.com "example.com"`
-3. **WebFetch third:** Fetch `https://dns.google/resolve?name=example.com&type=A` (Google DNS-over-HTTPS, returns JSON).
+2. **built-in web search second:** Search `"example.com" DNS records` or `site:securitytrails.com "example.com"`
+3. **built-in web fetch third:** Fetch `https://dns.google/resolve?name=example.com&type=A` (Google DNS-over-HTTPS, returns JSON).
 
 - Look for: A records (IP addresses), MX records (email provider), NS records, TXT records (SPF, DKIM)
 - Pivot on: IP addresses (what else is hosted there?), email provider choice
@@ -102,7 +102,7 @@ CLI-first cascade:
 1. `subfinder -d example.com -oJ` — 45+ passive sources, fast
 2. `curl -s "https://crt.sh/?q=%25.example.com&output=json" | jq '.[].name_value' | sort -u` — CT log query
 3. `amass enum -passive -d example.com -json output.json` — 87 sources, slower but thorough
-4. WebSearch fallback: `site:securitytrails.com "example.com" subdomains`
+4. built-in web search fallback: `site:securitytrails.com "example.com" subdomains`
 
 **Content & Exposure:**
 - Search: `site:example.com filetype:pdf OR filetype:doc OR filetype:xls`

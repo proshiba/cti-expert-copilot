@@ -7,9 +7,9 @@ author: "Hieu Ngo - chongluadao.vn"
 
 # CTI Expert
 
-Cyber threat intelligence and open-source intelligence skill. Turns Claude into a trained CTI/OSINT analyst. Generates precision search queries, interprets public data, builds case timelines, and delivers structured intelligence products — no API keys, no paid subscriptions.
+Cyber threat intelligence and open-source intelligence skill. Turns an AI coding agent into a trained CTI/OSINT analyst. Generates precision search queries, interprets public data, builds case timelines, and delivers structured intelligence products — no API keys, no paid subscriptions.
 
-> **Runs anywhere.** Works in **Claude Code** (Desktop & CLI) and in **OpenAI Codex / ChatGPT** and other `AGENTS.md`-aware agents — see [`AGENTS.md`](AGENTS.md) for the cross-agent runtime contract. Throughout this file, **`$SKILL_DIR`** = the directory containing this `SKILL.md` (Claude Code: `~/.claude/skills/cti-expert`; Codex/manual clone: the repo you are working in). Resolve it by locating `SKILL.md` — never hard-assume `~/.claude`. Detect the OS once (Windows/macOS/Linux) and prefer **uv** for all Python — see §13 Tool Auto-Install Policy.
+> **Runs anywhere.** Works in **GitHub Copilot CLI**, **Claude Code** (Desktop & CLI), **OpenAI Codex / ChatGPT**, and other agent runtimes — see [`AGENTS.md`](AGENTS.md) for the cross-agent runtime contract. Copilot uses the custom agent in `.github/agents/` and the dispatcher in `.github/skills/cti-expert/`. Throughout this file, **`$SKILL_DIR`** = the directory containing this root `SKILL.md` (Copilot/Codex/manual clone: the repo; Claude Code: `~/.claude/skills/cti-expert`). Resolve it by locating the root `SKILL.md` — never hard-assume a vendor-specific home directory. Detect the OS once (Windows/macOS/Linux) and prefer **uv** for all Python — see §13 Tool Auto-Install Policy.
 
 Collection method: `agent-browser` when available (JavaScript-heavy sites, infinite-scroll, screenshot evidence), with automatic fallback to web search / web fetch / direct URL fetch. Tool limitations are logged as collection gaps — never as case blockers.
 
@@ -374,7 +374,7 @@ Reference directory: `techniques/`
 | `fx-http-fingerprint.md` | HTTP fingerprinting and server signature analysis |
 | `fx-leak-monitoring.md` | Leak and breach monitoring, paste site search |
 <!-- dork-integration:phase-05 start -->
-| `fx-dork-sweep.md` | Zero-auth Google/Bing dork sweeps — Telegram ecosystem, doc-hosts, filetype families + 4-tier fallback cascade (WebSearch → Bing → DDG → agent-browser) |
+| `fx-dork-sweep.md` | Zero-auth Google/Bing dork sweeps — Telegram ecosystem, doc-hosts, filetype families + 4-tier fallback cascade (built-in web search → Bing → DDG → agent-browser) |
 | `fx-document-leak-hunt.md` | 18-platform document leak discovery with severity classification, paywall handling, auto-snapshot |
 <!-- dork-integration:phase-05 end -->
 | `username-osint.md` | 3000+ platform enumeration with pivot extraction |
@@ -565,7 +565,7 @@ Extracts EVERY indicator that profiles or can reach an actor/victim — network 
 
 **Preferred — `uv run` (any OS, any agent, zero setup):**
 ```bash
-S="$SKILL_DIR/scripts"     # $SKILL_DIR = dir containing SKILL.md (Claude Code: ~/.claude/skills/cti-expert; Codex/clone: the repo)
+S="$SKILL_DIR/scripts"     # $SKILL_DIR = dir containing the root SKILL.md (Copilot/Codex: repo; Claude Code: ~/.claude/skills/cti-expert)
 # Primary: HYBRID — full narrative from MD + charts/diagrams from JSON (zero content loss)
 uv run "$S/generate-cti-docx-hybrid.py" "REPORT.md" "REPORT.json" "REPORT.docx"
 # Fallback 1: JSON-only (charts + structured data; no pandoc needed)
@@ -573,7 +573,7 @@ uv run "$S/generate-cti-docx.py" "REPORT.json" "REPORT.docx"
 # Fallback 2: MD-only (styled narrative, no charts)
 uv run "$S/generate-cti-docx-hybrid.py" "REPORT.md" "REPORT.docx"
 ```
-> Windows PowerShell: set `$S = "$env:USERPROFILE\.claude\skills\cti-expert\scripts"` (Claude Code) or `"<repo>\scripts"` (Codex/clone), and use backslash paths.
+> Windows PowerShell: set `$S = Join-Path $SKILL_DIR "scripts"`; use the open repository for Copilot/Codex or the installed skill directory for Claude Code.
 
 **Fallback — no uv installed.** Use the OS interpreter; the script's `ensure_deps()` installs the libs on first run (via uv if present, else pip):
 - macOS / Linux (Bash): `python3 "$S/generate-cti-docx-hybrid.py" "REPORT.md" "REPORT.json" "REPORT.docx"`
@@ -1065,7 +1065,7 @@ When `/case` or `/sweep` runs on a Domain or Org target, it inspects the MX reco
 
 ### Step 0 — Detect the platform (once per session)
 
-Determine the OS before running anything, and cache it for the rest of the session. In Claude Code the environment block already reports it (e.g. `Platform: win32` → Windows). Otherwise probe: PowerShell `$IsWindows`/`$IsMacOS`, or Bash `uname -s` (`Darwin`=macOS, `Linux`=Linux, `MINGW*`/`MSYS*`/`CYGWIN*`=Windows/Git Bash). Then fix these conventions:
+Determine the OS before running anything, and cache it for the rest of the session. Use runtime-provided platform metadata when available; otherwise probe with PowerShell `$IsWindows`/`$IsMacOS`, or Bash `uname -s` (`Darwin`=macOS, `Linux`=Linux, `MINGW*`/`MSYS*`/`CYGWIN*`=Windows/Git Bash). Then fix these conventions:
 
 | | Windows | macOS / Linux |
 |--|---------|---------------|
@@ -1124,8 +1124,8 @@ If uv genuinely cannot be installed, fall back to the per-OS `pip`/`pipx`/`venv`
 
 The exact winget IDs, brew formulae, apt packages, uv commands, import names, and Go module paths for **every** tool are tabulated in [`scripts/platform-setup.md`](scripts/platform-setup.md) §5. To provision a fresh machine in one shot, run the bundled installer for the detected OS:
 
-- **Windows:** `powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\skills\cti-expert\scripts\install.ps1"`
-- **macOS / Linux / Git Bash / WSL:** `bash ~/.claude/skills/cti-expert/scripts/install.sh`
+- **Windows:** `powershell -ExecutionPolicy Bypass -File "$SKILL_DIR\scripts\install.ps1"`
+- **macOS / Linux / Git Bash / WSL:** `bash "$SKILL_DIR/scripts/install.sh"`
 
 (both accept `--headless`/`-Headless`, `--go`/`-Go`, `--all`/`-All`)
 

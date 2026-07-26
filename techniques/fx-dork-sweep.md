@@ -1,7 +1,7 @@
 # fx-dork-sweep
 
 ## Purpose
-Execute zero-auth Google-style dork sweeps across Telegram ecosystem, document-hosting platforms, and target-domain filetypes. Builds precision queries, runs through a 4-tier fallback cascade (WebSearch → Bing → DuckDuckGo → agent-browser), deduplicates hits, and records findings to subject registry.
+Execute zero-auth Google-style dork sweeps across Telegram ecosystem, document-hosting platforms, and target-domain filetypes. Builds precision queries, runs through a 4-tier fallback cascade (built-in web search → Bing → DuckDuckGo → agent-browser), deduplicates hits, and records findings to subject registry.
 
 ## Quick Reference
 | Item | Detail |
@@ -55,7 +55,7 @@ Google OR-chains cap at ~32 terms. Count sites + filetypes + keywords. If >30 �
 
 Invoke tiers sequentially. Escalate only on failure signal. Add 2s delay between tier transitions.
 
-| Operator | T1 WebSearch | T2 Bing | T3 DDG | T4 Browser |
+| Operator | T1 built-in web search | T2 Bing | T3 DDG | T4 Browser |
 |----------|:---:|:---:|:---:|:---:|
 | `site:` | ✅ | ✅ | ~✅ | ✅ |
 | `filetype:` | ✅ | ✅ | ~✅ | ✅ |
@@ -67,18 +67,18 @@ Invoke tiers sequentially. Escalate only on failure signal. Add 2s delay between
 
 **If query contains `inurl:` → skip T2; go T1 → T3 → T4.**
 
-**Tier 1 — WebSearch (default):**
+**Tier 1 — built-in web search (default):**
 ```
-# Invocation: WebSearch(query="QUERY")
+# Invocation: submit QUERY through the current runtime's built-in web search
 # Success: non-empty results array
 # Failure: rate-limit error OR empty after retry
 # Transition: sleep 2s → Tier 2
 ```
 
-**Tier 2 — Bing direct URL via WebFetch:**
+**Tier 2 — Bing direct URL via built-in web fetch:**
 ```
 # URL: https://www.bing.com/search?q={URLENC_QUERY}
-# Invocation: WebFetch(url, prompt="extract organic result URLs and snippets")
+# Invocation: fetch the URL and request organic result URLs and snippets
 # User-Agent: rotate from UA pool (below) every 3 queries
 # Success: HTML contains <li class="b_algo">
 # Failure: CAPTCHA page OR zero results
@@ -90,7 +90,7 @@ Invoke tiers sequentially. Escalate only on failure signal. Add 2s delay between
 ```
 # URL: https://html.duckduckgo.com/html/?q={URLENC_QUERY}
 # Method: POST (body: q={URLENC_QUERY})
-# Invocation: WebFetch(url, prompt="extract result URLs from class='result__url'")
+# Invocation: fetch the URL and extract links from class='result__url'
 # Success: parsed results >0
 # Failure: operator not applied (heuristic: 0 results on narrow dork)
 # Transition: Tier 4
@@ -147,7 +147,7 @@ assets. Full tradecraft: [`china-recon.md`](china-recon.md) §4.
 ## Output Format
 ```
 Dork Sweep: acme-corp.com  [--filetype --clean]
-Cascade: T1 WebSearch (42 hits) → dedup → 28 unique
+Cascade: T1 built-in web search (42 hits) → dedup → 28 unique
 Splits: 1 (no overflow)
 
 HIGH (indexed, ≥2-tier confirmed):

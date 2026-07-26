@@ -6,7 +6,7 @@
 
 ### 什么是 CTI Expert？
 
-一个 Claude Code 技能，将 Claude 转变为训练有素的网络威胁情报和开源情报分析师。使用 **74+ 个命令**、**40 种技术**进行结构化情报收集——核心功能无需 API 密钥。若想充分发挥技能的全部能力，你可以将自己的**免费*或*付费** API 密钥添加到 `.env` 文件——每个密钥都会被**自动检测**并解锁更高级别的访问（如 Wigle、VirusTotal、URLScan.io、Shodan、Censys、SecurityTrails、WhoisXML）。
+一个以 **GitHub Copilot CLI** 为主要运行环境的 Agent Skill，可将 AI 编码代理转变为训练有素的网络威胁情报和开源情报分析师。使用 **74+ 个命令**、**40 种技术**进行结构化情报收集——核心功能无需 API 密钥。若想充分发挥技能的全部能力，你可以将自己的**免费*或*付费** API 密钥添加到 `.env` 文件——每个密钥都会被**自动检测**并解锁更高级别的访问（如 Wigle、VirusTotal、URLScan.io、Shodan、Censys、SecurityTrails、WhoisXML）。
 
 > [!TIP]
 > **默认免费——有了你的密钥更强大。** 所有功能零密钥即可运行。若要解锁全部能力，将任意**免费或付费** API 密钥放入 `.env`（或运行 `/apikeys set <服务> <KEY>`）；它们会被**自动检测**，并立即为 `/webpivot` 及其他技术升级：反向 favicon→主机、被动 DNS、证书搜索、同源兄弟域名枢轴。缺失/错误的密钥只会降级为提示。完整列表与设置：[handbook/api-keys.md](handbook/api-keys.md)。
@@ -31,9 +31,26 @@
 
 ### 安装
 
-> **推荐：** 使用 **Claude Code CLI** — 提供完整的终端工作流、持久会话和直接技能调用。[点击下载](https://docs.anthropic.com/en/docs/claude-code/overview) 或运行 `npm install -g @anthropic-ai/claude-code`。
+> **推荐：GitHub Copilot CLI。** 本仓库原生提供 `.github/copilot-instructions.md`、
+> `cti-expert` 自定义代理和 Agent Skill，无需复制到 Claude 专用目录。
 
-#### 为什么推荐 Claude Code CLI？
+```bash
+npm install -g @github/copilot
+git clone https://github.com/7onez/cti-expert.git
+cd cti-expert
+copilot
+# 在交互界面输入 /agent，选择 cti-expert，然后输入：
+# case example.com
+```
+
+Copilot CLI 的斜杠命令用于控制 CLI，因此 CTI 命令应输入为 `case`、`report` 等，
+不要输入 `/case`。下面的 Claude Code 安装方式仅作为兼容运行环境保留。
+
+#### Claude Code（可选兼容运行环境）
+
+> **可选：** 使用 **Claude Code CLI** — 提供完整的终端工作流、持久会话和直接技能调用。[点击下载](https://docs.anthropic.com/en/docs/claude-code/overview) 或运行 `npm install -g @anthropic-ai/claude-code`。
+
+#### 为什么也可以使用 Claude Code CLI？
 
 整个 CTI Expert 工作流针对 Claude Code CLI 进行了优化：
 - **持久会话** — 调查通过 `/cti-expert /workspace save` 跨重启保存

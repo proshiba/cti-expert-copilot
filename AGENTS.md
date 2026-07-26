@@ -2,14 +2,16 @@
 
 CTI Expert is a cyber threat intelligence / OSINT analysis skill. This file is the
 **cross-agent entry point** so the skill runs the same way in **Claude Code**
-(Desktop & CLI), **OpenAI Codex / ChatGPT**, and any other agent that reads
+(Desktop & CLI), **GitHub Copilot CLI**, **OpenAI Codex / ChatGPT**, and any other agent that reads
 `AGENTS.md`. It is deliberately short — the full command catalog and operating rules
 live in **`SKILL.md`** (read it and follow it), and the complete install matrix lives
 in **`scripts/platform-setup.md`**.
 
 > **Claude Code** loads `SKILL.md` directly (this skill is installed under
-> `~/.claude/skills/cti-expert`). **Codex** auto-loads this `AGENTS.md` when working
-> inside the repo. Both then defer to `SKILL.md` for the analyst workflow.
+> `~/.claude/skills/cti-expert`). **GitHub Copilot CLI** loads the repository
+> instructions and can select `.github/agents/cti-expert.agent.md`; its discoverable
+> Agent Skill lives at `.github/skills/cti-expert/SKILL.md`. **Codex** auto-loads
+> this `AGENTS.md` in the repo. All runtimes defer to the root `SKILL.md`.
 
 ---
 
@@ -18,6 +20,7 @@ in **`scripts/platform-setup.md`**.
 `$SKILL_DIR` = **the directory that contains `SKILL.md`** (this same directory):
 
 - **Claude Code:** `~/.claude/skills/cti-expert`
+- **GitHub Copilot CLI:** the open repository, or `~/.copilot/skills/cti-expert`
 - **Codex / manual clone:** the repository you are working in (often the current
   working directory, or wherever you cloned `cti-expert`).
 
@@ -109,7 +112,20 @@ enrichment as follow-ups to run where execution is available. Do not claim a too
 
 ---
 
-## 7. Using this skill in Codex / ChatGPT
+## 7. Using this skill in GitHub Copilot CLI
+
+- **In-repository (recommended):** start `copilot` from this repository. Copilot
+  discovers `.github/copilot-instructions.md`, the `cti-expert` custom agent, and
+  the Agent Skill automatically. Use `/agent` and select **cti-expert**, then enter
+  `case example.com` (or any command from `SKILL.md` without its leading slash).
+  Copilot CLI reserves slash-prefixed input for its own interactive commands.
+- **Non-interactive:** run `copilot --agent=cti-expert --prompt "case example.com"`
+  from the repository.
+- **Global skill:** clone the complete repository to
+  `~/.copilot/skills/cti-expert`. Keep the full tree together because the root
+  `SKILL.md` references `engine/`, `techniques/`, `handbook/`, and `scripts/`.
+
+## 8. Using this skill in Codex / ChatGPT
 
 - **Auto (in-repo):** open Codex in the `cti-expert` repo — it loads this `AGENTS.md`
   automatically. Then ask it to follow `SKILL.md`.
@@ -123,12 +139,12 @@ Full reference: [`SKILL.md`](SKILL.md) (commands & workflow) ·
 
 ---
 
-## 8. Best environment for this skill (tell the user if limited)
+## 9. Best environment for this skill (tell the user if limited)
 
 This skill is **execution-heavy** — local shell, file output, external recon, persistent
 workspaces. It runs best where there is a **real local shell + persistent filesystem +
-open network**: a **CLI** (Claude Code CLI / Codex CLI) or a **local desktop/IDE agent**
-(Claude Code Desktop / Codex IDE extension). In an **ephemeral cloud sandbox**
+open network**: a **CLI** (GitHub Copilot CLI / Claude Code CLI / Codex CLI) or a
+**local desktop/IDE agent**. In an **ephemeral cloud sandbox**
 (claude.ai/code web, Codex cloud / ChatGPT web), reasoning and query generation still
 work, but generated files won't persist to the user's disk and outbound network is often
 restricted. **If you detect you're in such an environment, say so**, produce the Markdown

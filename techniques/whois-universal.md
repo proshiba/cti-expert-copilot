@@ -112,7 +112,7 @@ When all programmatic methods fail:
 curl -sL "https://who.is/whois/domain.vn" | grep -A5 'Registrant'
 
 # Google for cached WHOIS
-# WebSearch: "domain.vn" whois registration registrant
+# built-in web search: "domain.vn" whois registration registrant
 ```
 
 ---
@@ -128,11 +128,11 @@ curl -s "https://api.whoxy.com/?key=free&reverse=whois&email=target@email.com" |
 # Whoxy reverse by name
 curl -s "https://api.whoxy.com/?key=free&reverse=whois&name=John+Doe" | jq '.search_result[]'
 
-# ViewDNS reverse (WebSearch)
-# WebSearch: site:viewdns.info/reversewhois/?q=target@email.com
+# ViewDNS reverse (built-in web search)
+# built-in web search: site:viewdns.info/reversewhois/?q=target@email.com
 
-# DomainBigData (WebSearch)
-# WebSearch: site:domainbigdata.com "registrant" "target@email.com"
+# DomainBigData (built-in web search)
+# built-in web search: site:domainbigdata.com "registrant" "target@email.com"
 ```
 
 ---
@@ -146,10 +146,10 @@ Track ownership changes over time:
 curl -s "https://api.whoxy.com/?key=free&history=domain.com" | jq '.whois_records[]'
 
 # Wayback Machine WHOIS snapshots
-# WebSearch: site:web.archive.org "domain.com" whois
+# built-in web search: site:web.archive.org "domain.com" whois
 
 # Google cache of SecurityTrails/DomainTools pages
-# WebSearch: cache:securitytrails.com/domain/domain.com/dns
+# built-in web search: cache:securitytrails.com/domain/domain.com/dns
 ```
 
 ---

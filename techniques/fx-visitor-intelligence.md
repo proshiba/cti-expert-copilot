@@ -68,9 +68,9 @@ Gathers visitor statistics, technology profiles, geographic distribution, traffi
 | Step | Method | Command | Confidence |
 |------|--------|---------|-----------|
 | 1 | Existing traffic module | `/traffic <domain>` — Tranco, Cloudflare, Umbrella composite | HIGH |
-| 2 | SimilarWeb data | WebSearch `site:similarweb.com "<domain>"` → scrape summary | MODERATE |
-| 3 | HypeStat scrape | WebFetch `https://hypestat.com/<domain>` → extract visitor data | LOW |
-| 4 | StatsCrop scrape | WebFetch `https://statscrop.com/<domain>` → extract stats | LOW |
+| 2 | SimilarWeb data | built-in web search `site:similarweb.com "<domain>"` → scrape summary | MODERATE |
+| 3 | HypeStat scrape | built-in web fetch `https://hypestat.com/<domain>` → extract visitor data | LOW |
+| 4 | StatsCrop scrape | built-in web fetch `https://statscrop.com/<domain>` → extract stats | LOW |
 
 **Output fields:**
 - Monthly visits (estimated range)
@@ -120,8 +120,8 @@ curl -s "https://<domain>" | grep -oP '(hj\(.hjid.,\K[0-9]+|hs-script\.com/\K[0-
 # All returned domains share the same account → same owner
 
 # Step 4: Verify with secondary search
-# WebSearch: "G-XXXXXXXXXX" site:publicwww.com OR "G-XXXXXXXXXX"
-# WebSearch: "pub-XXXXXXXXXX" site:publicwww.com OR "pub-XXXXXXXXXX"
+# built-in web search: "G-XXXXXXXXXX" site:publicwww.com OR "G-XXXXXXXXXX"
+# built-in web search: "pub-XXXXXXXXXX" site:publicwww.com OR "pub-XXXXXXXXXX"
 ```
 
 **Supported tracking IDs:**
@@ -152,11 +152,11 @@ curl -s "https://<domain>" | grep -oP '(hj\(.hjid.,\K[0-9]+|hs-script\.com/\K[0-
 
 | Method | Command | Confidence |
 |--------|---------|-----------|
-| SimilarWeb "similar sites" | WebSearch `site:similarweb.com "<domain>" similar` | MODERATE |
+| SimilarWeb "similar sites" | built-in web search `site:similarweb.com "<domain>" similar` | MODERATE |
 | Shared hosting / IP neighbors | `dig +short <domain>` → `curl -s "https://api.hackertarget.com/reverseip/?q=<IP>"` | LOW |
 | Shared analytics (PublicWWW) | Same GA/GTM ID → co-owned sites | VERY HIGH |
-| Category competitors | WebSearch `"<domain>" competitors alternatives` | LOW |
-| SEMrush competitor data | WebSearch `site:semrush.com "<domain>" competitors` | MODERATE |
+| Category competitors | built-in web search `"<domain>" competitors alternatives` | LOW |
+| SEMrush competitor data | built-in web search `site:semrush.com "<domain>" competitors` | MODERATE |
 
 ---
 
@@ -175,10 +175,10 @@ curl -sI "https://<domain>" | grep -iE '^(server|x-powered|x-generator|x-cdn|via
 curl -s "https://<domain>" | grep -oP '(G-[A-Z0-9]+|GTM-[A-Z0-9]+|UA-[0-9]+-[0-9]+)'
 
 # HypeStat visitor data
-# WebFetch https://hypestat.com/<domain> → parse visitor stats
+# built-in web fetch https://hypestat.com/<domain> → parse visitor stats
 
 # Netcraft hosting intel
-# WebFetch https://sitereport.netcraft.com/?url=<domain> → parse server info
+# built-in web fetch https://sitereport.netcraft.com/?url=<domain> → parse server info
 ```
 
 ### `/techstack <domain>` — Technology stack analysis only
@@ -209,7 +209,7 @@ GAID=$(curl -s "https://<domain>" | grep -oP 'G-[A-Z0-9]+' | head -1)
 echo "Search PublicWWW for: ${GAID}"
 
 # Similar sites via search
-# WebSearch: "<domain>" alternatives OR similar sites OR competitors
+# built-in web search: "<domain>" alternatives OR similar sites OR competitors
 ```
 
 ---
@@ -288,7 +288,7 @@ echo "Search PublicWWW for: ${GAID}"
 |----------------|----------|
 | BuiltWith API down | Use httpx + header analysis + source scanning |
 | httpx not installed | Skip; use curl header analysis only |
-| Netcraft blocked | Use WebSearch for cached report |
+| Netcraft blocked | Use built-in web search for cached report |
 
 ### Visitor Volume
 
@@ -309,9 +309,9 @@ echo "Search PublicWWW for: ${GAID}"
 
 | Primary Failed | Fallback |
 |----------------|----------|
-| PublicWWW unavailable | Use WebSearch for analytics ID |
+| PublicWWW unavailable | Use built-in web search for analytics ID |
 | No analytics ID found | Use IP neighbor reverse lookup |
-| Reverse IP fails | Use WebSearch category competitors only |
+| Reverse IP fails | Use built-in web search category competitors only |
 
 ---
 

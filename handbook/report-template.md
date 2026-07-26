@@ -9,7 +9,7 @@ When the user issues `/intel-report`, generate a markdown file following this ex
 
 **Classification:** OPEN SOURCE — PUBLIC DATA ONLY
 **Report Date:** [YYYY-MM-DD]
-**Analyst:** Claude (AI-Assisted OSINT)
+**Analyst:** CTI Expert (AI-Assisted OSINT)
 **Subject:** [Primary target of investigation]
 **Report ID:** INTSUM-[YYYYMMDD]-[short-subject-slug]
 

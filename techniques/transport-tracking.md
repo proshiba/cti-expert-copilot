@@ -199,7 +199,7 @@ curl -s "https://globe.adsbexchange.com/re-api/?find=ABCDEF" \
 
 ### Marine Traffic Vessel Search (Web)
 ```bash
-# No CLI — use browser or WebFetch
+# No CLI — use browser or built-in web fetch
 # URL pattern for vessel by MMSI:
 # https://www.marinetraffic.com/en/ais/details/ships/mmsi:{MMSI}
 
